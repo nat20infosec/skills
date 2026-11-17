@@ -17,7 +17,7 @@ A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/p
 |---|---|
 | [`malware-triage`](plugins/malware-triage) | Static-only first-look triage of a suspicious file (hashing, strings, header inspection) into a Scope/Capability/Attribution/Detection brief. Never executes the file. Full lab scaffold for the dynamic-analysis follow-up lives in the standalone [malware-triage](https://github.com/nat20infosec/malware-triage) repo. |
 | [`osint-recon`](plugins/osint-recon) | Passive, public-source recon on a vendor, product, domain, or your own org's footprint, graded by source reliability and corroboration. |
-| [`threat-intel`](plugins/threat-intel) | Turns a threat article, CVE, malware family, campaign, or APT reference into a structured analysis: architecture, IOCs, MITRE ATT&CK mapping, relevance assessment. **Before real use**, fill in the "Configuring this skill for your environment" section with your own org's stack — this version ships generic on purpose. |
+| [`threat-intel`](plugins/threat-intel/README.md) | Turns a threat article, CVE, malware family, campaign, or APT reference into a structured analysis: architecture, IOCs, MITRE ATT&CK mapping, relevance assessment. **Before real use**, fill in the "Configuring this skill for your environment" section with your own org's stack — this version ships generic on purpose. No standalone repo for this one — marketplace-only. |
 
 ## Why a marketplace instead of separate repos
 
