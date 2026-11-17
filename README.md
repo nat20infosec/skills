@@ -26,3 +26,9 @@ Each plugin above also lives (or will live) as its own standalone repo for anyon
 ## Contributing
 
 Each plugin is a self-contained folder under `plugins/<name>/` with its own `.claude-plugin/plugin.json` and `skills/<name>/SKILL.md`. To add a new one, copy that shape and add an entry to `.claude-plugin/marketplace.json`.
+
+A GitHub Actions check ([`.github/workflows/validate-plugins.yml`](.github/workflows/validate-plugins.yml)) runs on every push and PR and fails the build if: `marketplace.json` or any `plugin.json` isn't valid JSON or is missing a required field, a plugin's `source` path doesn't exist, a plugin's name/version drifts from its marketplace entry, or a plugin is missing its `skills/<name>/SKILL.md`. Run it locally with:
+
+```bash
+node scripts/validate-plugins.mjs
+```
