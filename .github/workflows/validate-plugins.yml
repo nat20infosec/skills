@@ -15,3 +15,10 @@ jobs:
         with:
           node-version: "20"
       - run: node scripts/validate-plugins.mjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify aws-cspm CLI commands exist in botocore
+        run: |
+          pip install --quiet botocore
+          python scripts/verify-aws-commands.py

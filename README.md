@@ -1,6 +1,6 @@
 # nat20infosec Claude Code skills
 
-A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces) of defensive-security skills: malware triage, OSINT recon, and threat-intel analysis.
+A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces) of defensive-security skills: malware triage, OSINT recon, threat-intel analysis, and AWS posture review.
 
 ## Install
 
@@ -9,6 +9,8 @@ A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/p
 /plugin install malware-triage@nat20infosec
 /plugin install osint-recon@nat20infosec
 /plugin install threat-intel@nat20infosec
+/plugin install aws-cspm@nat20infosec
+/plugin install owasp-security@nat20infosec   # third-party, by Agam More
 ```
 
 ## Plugins
@@ -18,6 +20,7 @@ A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/p
 | [`malware-triage`](plugins/malware-triage/README.md) | Static-only first-look triage of a suspicious file (hashing, strings, header inspection) into a Scope/Capability/Attribution/Detection brief. Never executes the file. Ships with a Vagrant lab scaffold ("the cage") for the isolated VM used in the dynamic-analysis follow-up. |
 | [`osint-recon`](plugins/osint-recon) | Passive, public-source recon on a vendor, product, domain, or your own org's footprint, graded by source reliability and corroboration. |
 | [`threat-intel`](plugins/threat-intel/README.md) | Turns a threat article, CVE, malware family, campaign, or APT reference into a structured analysis: architecture, IOCs, MITRE ATT&CK mapping, relevance assessment. **Before real use**, fill in the "Configuring this skill for your environment" section with your own org's stack — this version ships generic on purpose. |
+| [`aws-cspm`](plugins/aws-cspm/README.md) | Read-only AWS posture review. Sweeps an account or triages Prowler / Security Hub output, rates each finding by actual exposure path and blast radius, and reports what it could not see. Includes a generated index of all Security Hub CSPM controls so control IDs are verified before they're cited. **v0.1.0: not yet run against a live account.** |
 | [`owasp-security`](https://github.com/agamm/claude-code-owasp) | **Third-party, by [Agam More](https://github.com/agamm) (MIT).** OWASP Top 10:2025, ASVS 5.0, LLM Top 10 and Agentic Top 10 security review. Listed here by reference — nothing is copied into this repo — and pinned to a reviewed upstream commit. |
 
 ### Third-party plugins

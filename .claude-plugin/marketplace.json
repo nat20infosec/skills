@@ -6,7 +6,7 @@
   },
   "metadata": {
     "version": "1.0.0",
-    "description": "Claude Code skills from Nat20 InfoSec for defensive security work: malware triage, OSINT recon, and threat-intel analysis."
+    "description": "Claude Code skills from Nat20 InfoSec for defensive security work: malware triage, OSINT recon, threat-intel analysis, and AWS posture review."
   },
   "plugins": [
     {
@@ -35,6 +35,15 @@
         "name": "nat20infosec"
       },
       "source": "./plugins/threat-intel"
+    },
+    {
+      "name": "aws-cspm",
+      "description": "Read-only AWS cloud security posture review: sweeps an account or triages Prowler/Security Hub output, rates findings by actual exposure path and blast radius, and never changes anything in the account. Includes an index of all Security Hub CSPM controls for verified citations.",
+      "version": "0.1.0",
+      "author": {
+        "name": "nat20infosec"
+      },
+      "source": "./plugins/aws-cspm"
     },
     {
       "name": "owasp-security",
