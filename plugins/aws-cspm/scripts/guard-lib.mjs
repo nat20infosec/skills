@@ -21,7 +21,9 @@ const VALUE_FLAGS = new Set([
 ]);
 
 export function loadAllowlist(path = CATALOG) {
-  const md = readFileSync(path, "utf8");
+  // Windows checkouts (core.autocrlf) store the catalog with CRLF; without this the fence regex matches nothing
+  // and every aws call is blocked.
+  const md = readFileSync(path, "utf8").replace(/\r\n/g, "\n");
   const allowed = new Set();
   for (const block of md.matchAll(/```bash\n([\s\S]*?)```/g)) {
     const text = block[1].replace(/\\\n\s*/g, " ");

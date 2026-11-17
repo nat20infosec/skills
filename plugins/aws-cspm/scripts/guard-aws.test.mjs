@@ -4,11 +4,26 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { evaluate, loadAllowlist, findAwsCalls } from "./guard-lib.mjs";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { CATALOG, evaluate, loadAllowlist, findAwsCalls } from "./guard-lib.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const allow = loadAllowlist();
 const blocked = (cmd) => evaluate(cmd, allow).length > 0;
+
+test("a CRLF catalog (Windows checkout with core.autocrlf) yields the same allowlist", () => {
+  const dir = mkdtempSync(join(tmpdir(), "guard-crlf-"));
+  try {
+    const crlf = join(dir, "commands.md");
+    writeFileSync(crlf, readFileSync(CATALOG, "utf8").replace(/\r?\n/g, "\r\n"));
+    const fromCrlf = loadAllowlist(crlf);
+    assert.ok(fromCrlf.size > 100, `CRLF catalog parsed to only ${fromCrlf.size} pairs`);
+    assert.deepEqual([...fromCrlf].sort(), [...allow].sort());
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
 
 test("catalog yields a sensible allowlist", () => {
   assert.ok(allow.size > 100, `only ${allow.size} pairs parsed`);
