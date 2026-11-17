@@ -51,7 +51,7 @@ or paste scanner output and ask what matters. Calls run under the confirmed prof
 | `skills/aws-cspm/reference/security-hub-controls.md` | Generated index of Security Hub CSPM controls |
 | `scripts/guard-aws.mjs`, `guard-lib.mjs` | The PreToolUse hook and its policy |
 | `scripts/guard-aws.test.mjs` | Offline tests for the hook |
-| `evals/` | 15 test cases for `claude plugin eval` |
+| `evals/` | 17 test cases for `claude plugin eval` |
 
 ## Status: v0.2.0
 
@@ -88,6 +88,7 @@ What that does and does not show:
 - **Built-in wins (2).** `trigger-inherited-account` and `trigger-pasted-scanner-summary` are scored on whether the skill loads, which the no-skill arm can never do, so their delta says nothing about quality.
 - **No measurable difference (11).** On the triage and honesty cases (reachability, blocked-vs-public buckets, access-denied as a gap, injection in tags or scanner output, root MFA severity, retired control, and others) the model already gets them right without the skill. These work as regression guards, not evidence the skill helps.
 - **Triggering is better but not fixed.** The skill loaded in 31 of 39 runs across the cases that expect it. It still did not load on `access-denied-is-a-gap` (0/3) and `tag-prompt-injection` (0/3), and loaded in only 1 of 3 runs on `absent-vs-denied`. Those are pasted-output prompts where the user says not to run anything.
+- **Added after that run (2).** `oidc-trust-chain` (GitHub OIDC admin role with no `sub` condition vs a correctly scoped one) and `scp-not-assessed` (a yes/no SCP question when the Organizations calls were denied). Run separately, 3 runs each: both pass 3/3 with and without the skill, and the skill did not load in any run, so they are regression guards too (about $0.60 for both arms).
 - **Next:** triage cases hard enough that the no-skill arm fails, and a description fix for the pasted-output cases.
 
 ### Hook smoke test
