@@ -52,7 +52,9 @@ Verified so far:
 - Every `aws` service, operation, and flag in `commands.md` exists in botocore's API models (`scripts/verify-aws-commands.py`, run in CI). This checks the commands are real, not that their output reads the way the skill assumes.
 - The control index is regenerated from AWS's docs by `scripts/gen-securityhub-index.mjs`, which fails if any control in AWS's master table is missing.
 
-**Not yet verified:** it has not been run against a live account, and the five eval cases in [`evals/`](evals) have been written but not run. Treat the first few reviews as a shakedown, and read the coverage table before trusting a "no findings" result.
+Evals (Sonnet, 3 runs per case, with and without the skill, 2026-11-17): all 5 cases passed in both arms, so **the suite does not yet show the skill adding anything**. The score delta is 0 on every case, because the model already handles these scenarios unaided. The skill also loaded in only 1 of the 4 relevant cases (it fired on the security-group case, not on the S3, access-denied, or tag-injection ones), so its description needs work on triggering for pasted scanner output. Next steps: cases hard enough that the no-skill arm fails, and a trigger fix.
+
+**Not yet verified:** it has not been run against a live account. Treat the first few reviews as a shakedown, and read the coverage table before trusting a "no findings" result.
 
 ```bash
 claude plugin eval plugins/aws-cspm            # real model calls, billed to your account
