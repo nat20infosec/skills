@@ -1,0 +1,9 @@
+{
+  "name": "osint-recon",
+  "version": "1.0.0",
+  "description": "Passive, public-source security recon on a vendor, product, domain, or your org's own footprint. Produces a graded OSINT brief. Security/technical scope only, not financial or legal due diligence.",
+  "author": {
+    "name": "nat20infosec",
+    "url": "https://github.com/nat20infosec"
+  }
+}

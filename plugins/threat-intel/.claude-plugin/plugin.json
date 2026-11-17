@@ -1,0 +1,9 @@
+{
+  "name": "threat-intel",
+  "version": "1.0.0",
+  "description": "Produces a structured threat intelligence analysis from a URL, article, CVE, malware family, campaign name, or APT group reference - campaign architecture, IOC extraction, MITRE ATT&CK mapping, and an organizational relevance assessment.",
+  "author": {
+    "name": "nat20infosec",
+    "url": "https://github.com/nat20infosec"
+  }
+}
