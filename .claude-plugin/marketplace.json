@@ -35,6 +35,22 @@
         "name": "nat20infosec"
       },
       "source": "./plugins/threat-intel"
+    },
+    {
+      "name": "owasp-security",
+      "description": "Third-party, MIT-licensed (c) Agam More: security review and secure-coding skill covering OWASP Top 10:2025, ASVS 5.0, LLM Top 10 (2026) and Agentic Top 10 (2026). Referenced from upstream, not copied; pinned to a reviewed commit.",
+      "author": {
+        "name": "Agam More",
+        "url": "https://github.com/agamm"
+      },
+      "homepage": "https://github.com/agamm/claude-code-owasp",
+      "license": "MIT",
+      "category": "security",
+      "source": {
+        "source": "github",
+        "repo": "agamm/claude-code-owasp",
+        "sha": "1ae29cb22518560e3625d77f2ae64f61647d9201"
+      }
     }
   ]
 }

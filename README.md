@@ -18,6 +18,11 @@ A [Claude Code plugin marketplace](https://docs.claude.com/en/docs/claude-code/p
 | [`malware-triage`](plugins/malware-triage/README.md) | Static-only first-look triage of a suspicious file (hashing, strings, header inspection) into a Scope/Capability/Attribution/Detection brief. Never executes the file. Ships with a Vagrant lab scaffold ("the cage") for the isolated VM used in the dynamic-analysis follow-up. |
 | [`osint-recon`](plugins/osint-recon) | Passive, public-source recon on a vendor, product, domain, or your own org's footprint, graded by source reliability and corroboration. |
 | [`threat-intel`](plugins/threat-intel/README.md) | Turns a threat article, CVE, malware family, campaign, or APT reference into a structured analysis: architecture, IOCs, MITRE ATT&CK mapping, relevance assessment. **Before real use**, fill in the "Configuring this skill for your environment" section with your own org's stack — this version ships generic on purpose. |
+| [`owasp-security`](https://github.com/agamm/claude-code-owasp) | **Third-party, by [Agam More](https://github.com/agamm) (MIT).** OWASP Top 10:2025, ASVS 5.0, LLM Top 10 and Agentic Top 10 security review. Listed here by reference — nothing is copied into this repo — and pinned to a reviewed upstream commit. |
+
+### Third-party plugins
+
+Entries whose `source` points at another repo are not our work and are not vendored. They're pinned to a full commit SHA (CI enforces this), so an upstream change never reaches you until it's been reviewed here and the pin is bumped.
 
 ## One repo, not several
 

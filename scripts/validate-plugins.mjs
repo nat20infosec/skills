@@ -60,9 +60,13 @@ if (marketplace && !Array.isArray(marketplace.plugins)) {
   for (const entry of marketplace.plugins) {
     const entryLabel = `marketplace.json entry "${entry?.name ?? "<unnamed>"}"`;
 
+    const isExternal = typeof entry?.source === "object" && entry.source !== null;
+
     requireFields(
       entry,
-      ["name", "description", "version", "author.name", "source"],
+      isExternal
+        ? ["name", "description", "author.name", "license", "source"]
+        : ["name", "description", "version", "author.name", "source"],
       entryLabel,
       marketplacePath,
     );
@@ -76,6 +80,20 @@ if (marketplace && !Array.isArray(marketplace.plugins)) {
 
     if (entry.version && !SEMVER.test(entry.version)) {
       fail(`${entryLabel}: version "${entry.version}" is not semver (x.y.z)`);
+    }
+
+    if (isExternal) {
+      const { source, repo, sha } = entry.source;
+      if (source !== "github") {
+        fail(`${entryLabel}: external source type "${source}" not supported by this validator (use "github")`);
+      }
+      if (!/^[\w.-]+\/[\w.-]+$/.test(repo ?? "")) {
+        fail(`${entryLabel}: external source needs "repo" as owner/name (got "${repo}")`);
+      }
+      if (!/^[0-9a-f]{40}$/.test(sha ?? "")) {
+        fail(`${entryLabel}: external source must be pinned to a full 40-char commit "sha" so unreviewed upstream changes never ship`);
+      }
+      continue;
     }
 
     if (!entry.source || !entry.source.startsWith("./")) {
