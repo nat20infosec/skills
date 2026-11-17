@@ -68,7 +68,7 @@ What changed from v0.1.0, from a line-by-line review of the whole plugin:
 Verified so far, offline:
 
 - Every `aws` service, operation, and flag in `commands.md` exists in botocore's API models, and the catalog contains only `describe-` / `list-` / `get-` operations plus two named exceptions, none of them on the never-run list (`scripts/verify-aws-commands.py`, run in CI). This checks the commands are real, not that their output reads the way the skill assumes.
-- The hook policy passes its unit tests, including smuggling attempts through `bash -c`, command chaining, and `$(...)`.
+- The hook policy passes its unit tests, including smuggling attempts through `bash -c`, command chaining, `$(...)`, and a catalog checked out with Windows (CRLF) line endings, which would otherwise make it block every call.
 - The control index is regenerated from AWS's docs by `scripts/gen-securityhub-index.mjs`, which fails if any control in AWS's master table is missing. It was not regenerated for this release.
 - `claude plugin validate --strict` passes on the plugin, the marketplace, and the skills directory.
 
@@ -76,7 +76,19 @@ Verified so far, offline:
 
 - It has **not been run against a live account.** Treat the first few reviews as a shakedown, and read the coverage table before trusting a "no findings" result.
 - The **hook has not been exercised inside a real Claude Code session.** The unit tests cover its decisions, not the wiring (that `${CLAUDE_PLUGIN_ROOT}` resolves in a skill hook). After installing, run the smoke test below.
-- The **evals have not been re-run** since the changes (they make billed model calls). The v0.1.0 run showed all five original cases passing with and without the skill, and the skill loading in only 1 of 4 relevant cases. The new cases are designed so the no-skill arm should fail, and the new description should fix triggering, but both are unconfirmed until the next run.
+- **The evals show the skill adds less than the headline suggests.** See "Eval results" below.
+
+### Eval results (v0.2.0, Sonnet, 3 runs per case, each with and without the skill)
+
+All 15 cases pass with the skill. Without it, 11 of 15 pass. Cost about $4.30, 5.5 minutes.
+
+What that does and does not show:
+
+- **Real wins (2).** `control-id-lookup` (the model cannot reliably give Security Hub severities and CIS v5.0.0 numbers from memory; with the index it can) and `posture-brief-shape` (follows the Posture Brief format; this measures format adherence, not better security judgment).
+- **Built-in wins (2).** `trigger-inherited-account` and `trigger-pasted-scanner-summary` are scored on whether the skill loads, which the no-skill arm can never do, so their delta says nothing about quality.
+- **No measurable difference (11).** On the triage and honesty cases (reachability, blocked-vs-public buckets, access-denied as a gap, injection in tags or scanner output, root MFA severity, retired control, and others) the model already gets them right without the skill. These work as regression guards, not evidence the skill helps.
+- **Triggering is better but not fixed.** The skill loaded in 31 of 39 runs across the cases that expect it. It still did not load on `access-denied-is-a-gap` (0/3) and `tag-prompt-injection` (0/3), and loaded in only 1 of 3 runs on `absent-vs-denied`. Those are pasted-output prompts where the user says not to run anything.
+- **Next:** triage cases hard enough that the no-skill arm fails, and a description fix for the pasted-output cases.
 
 ### Hook smoke test
 
