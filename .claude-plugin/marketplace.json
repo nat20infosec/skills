@@ -39,7 +39,7 @@
     {
       "name": "aws-cspm",
       "description": "Read-only AWS cloud security posture review: sweeps an account or triages Prowler/Security Hub output, rates findings by actual exposure path and blast radius, and never changes anything in the account. Includes an index of all Security Hub CSPM controls for verified citations.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "nat20infosec"
       },

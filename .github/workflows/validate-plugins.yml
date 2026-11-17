@@ -15,10 +15,12 @@ jobs:
         with:
           node-version: "20"
       - run: node scripts/validate-plugins.mjs
+      - name: Test the aws-cspm read-only guard hook
+        run: node --test plugins/aws-cspm/scripts/guard-aws.test.mjs
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify aws-cspm CLI commands exist in botocore
+      - name: Verify aws-cspm CLI commands exist in botocore and stay read-only
         run: |
           pip install --quiet botocore
           python scripts/verify-aws-commands.py

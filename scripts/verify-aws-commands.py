@@ -1,5 +1,7 @@
 # Verifies every `aws <service> <operation> --flag` in the aws-cspm command catalog exists in botocore's
-# API models. Checks names only, not what the output looks like. Needs: pip install botocore
+# API models, and that the catalog stays read-only: every operation must be describe-/list-/get- (plus one named
+# exception) and none may be on the never-run list. Checks names only, not what the output looks like.
+# Needs: pip install botocore
 import os, re, sys
 import botocore.session
 
@@ -10,6 +12,22 @@ CLI_TO_BOTO = {"configservice": "config", "s3api": "s3", "elbv2": "elbv2", "wafv
 # CLI-only conveniences that are not API members
 CLI_ONLY = {"query", "output", "region", "profile", "max-items", "page-size", "no-paginate", "starting-token",
             "cli-input-json", "generate-cli-skeleton", "debug", "no-verify-ssl", "endpoint-url"}
+
+# get- calls that return secrets, data, or code, and must never be catalogued (mirrors SKILL.md "never run")
+FORBIDDEN = {
+    ("secretsmanager", "get-secret-value"), ("ssm", "get-parameter"), ("ssm", "get-parameters"),
+    ("ssm", "get-parameters-by-path"), ("ec2", "get-password-data"), ("ec2", "get-console-output"),
+    ("ec2", "get-console-screenshot"), ("ecr", "get-login-password"), ("ecr", "get-authorization-token"),
+    ("ecr", "get-download-url-for-layer"), ("lambda", "get-function"), ("lambda", "get-function-configuration"),
+    ("lambda", "get-layer-version"), ("s3api", "get-object"), ("s3api", "get-object-attributes"),
+    ("logs", "get-log-events"), ("logs", "filter-log-events"), ("logs", "get-query-results"),
+    ("athena", "get-query-results"), ("glue", "get-connection"), ("glue", "get-connections"),
+    ("apigateway", "get-api-keys"), ("apigateway", "get-api-key"), ("apigateway", "get-export"),
+    ("cloudformation", "get-template"), ("sts", "get-session-token"), ("sts", "get-federation-token"),
+    ("iam", "get-login-profile"), ("sts", "assume-role"),
+}
+READ_ONLY_VERB = re.compile(r"^(describe|list|get)-")
+VERB_EXCEPTIONS = {("iam", "generate-credential-report"), ("configure", "list-profiles")}
 
 sess = botocore.session.get_session()
 available = set(sess.get_available_services())
@@ -33,6 +51,10 @@ def pascal(op):
 
 bad, seen = [], set()
 for svc, op, rest, full in cmds:
+    if (svc, op) in FORBIDDEN:
+        bad.append(f"FORBIDDEN OP in catalog: {svc} {op} :: {full[:90]}")
+    if not READ_ONLY_VERB.match(op) and (svc, op) not in VERB_EXCEPTIONS:
+        bad.append(f"NOT A READ-ONLY VERB: {svc} {op} :: {full[:90]}")
     if svc == "configure":
         continue
     bsvc = CLI_TO_BOTO.get(svc, svc)
